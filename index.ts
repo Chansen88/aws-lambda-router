@@ -64,16 +64,9 @@ export const handler = (routeConfig: RouteConfig) => {
 }
 
 const extractEventProcessorMapping = (routeConfig: RouteConfig) => {
-  const processorMap = new Map<string, EventProcessor>()
-  for (const key of Object.keys(routeConfig)) {
-    if (key === 'debug' || key === 'onError') {
-      continue
-    }
-    try {
-      processorMap.set(key, require(`./lib/${key}`))
-    } catch (error) {
-      throw new Error(`The event processor '${key}', that is mentioned in the routerConfig, cannot be instantiated (${error.toString()})`)
-    }
-  }
-  return processorMap
+  const processorMap = new Map();
+  processorMap.set('s3', require('./lib/s3'));
+  processorMap.set('sns', require('./lib/sns'));
+  processorMap.set('sqs', require('./lib/sqs'));
+  return processorMap;
 }
